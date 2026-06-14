@@ -472,18 +472,6 @@ node prisma/seed.js
 2. Add `REACT_APP_API_URL` environment variable
 3. Deploy automatically
 
----
-
-## 🧪 Demo Accounts
-
-```
-Admin:       vansh@assetiq.com    / admin123
-IT Manager:  chetana@assetiq.com  / chetana123
-Employee:    rahul@assetiq.com    / rahul123
-```
-
----
-
 ## 📊 Project Stats
 
 ```
@@ -505,14 +493,6 @@ Charts           →  6
 4. Push to branch (`git push origin feature/AmazingFeature`)
 5. Open Pull Request
 
----
-
-## 📝 License
-
-This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
-
----
-
 ## 👨‍💻 Author
 
 **Vansh Agrawal**
@@ -524,11 +504,8 @@ This project is licensed under the MIT License — see the [LICENSE](LICENSE) fi
 
 <div align="center">
 
-**Built with ❤️ using Node.js, React, PostgreSQL & Gemini AI**
+**Built with Node.js, Express.js, React, PostgreSQL, Prisma ORM and Gemini AI.**
 
 ⭐ Star this repo if you found it helpful!
 
-</div>
-READMEEOF
-echo "README created successfully"
 
