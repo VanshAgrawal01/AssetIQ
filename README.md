@@ -201,8 +201,8 @@ AstraIQ/
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/assetiq.git
-cd assetiq
+git clone https://github.com/yourusername/Assetiq.git
+cd Assetiq
 ```
 
 ### 2. Backend Setup
