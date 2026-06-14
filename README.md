@@ -10,7 +10,7 @@ mkdir -p /home/claude && cat > /home/claude/README.md << 'READMEEOF'
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15+-4169E1?style=flat-square&logo=postgresql&logoColor=white)](https://postgresql.org)
 [![Prisma](https://img.shields.io/badge/Prisma-ORM-2D3748?style=flat-square&logo=prisma&logoColor=white)](https://prisma.io)
 [![TailwindCSS](https://img.shields.io/badge/Tailwind-CSS-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
-[![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](LICENSE)
+
 
 **A full-stack IT Asset Management System with AI-powered insights, QR tracking, automated alerts, and complete employee lifecycle management.**
 
@@ -532,6 +532,4 @@ This project is licensed under the MIT License — see the [LICENSE](LICENSE) fi
 </div>
 READMEEOF
 echo "README created successfully"
-Output
 
-README created successfu
