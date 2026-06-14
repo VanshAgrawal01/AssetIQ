@@ -1,4 +1,3 @@
-mkdir -p /home/claude && cat > /home/claude/README.md << 'READMEEOF'
 # AssetIQ — Intelligent IT Asset & Employee Lifecycle Manager
 
 <div align="center">
