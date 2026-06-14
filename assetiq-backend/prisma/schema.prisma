@@ -1,0 +1,220 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  IT_MANAGER
+  EMPLOYEE
+}
+
+enum AssetStatus {
+  AVAILABLE
+  ASSIGNED
+  UNDER_REPAIR
+  WRITTEN_OFF
+  UNRETURNED
+}
+
+enum AssetType {
+  LAPTOP
+  MONITOR
+  KEYBOARD
+  MOUSE
+  HEADSET
+  PHONE
+  TABLET
+  OTHER
+}
+
+enum AssetCondition {
+  GOOD
+  DAMAGED
+  UNDER_REPAIR
+  WRITTEN_OFF
+}
+
+enum RequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum DamageStatus {
+  OPEN
+  UNDER_REVIEW
+  RESOLVED
+}
+
+enum ChecklistStatus {
+  PENDING
+  RETURNED
+  MISSING
+}
+
+model User {
+  id         String   @id @default(cuid())
+  name       String
+  email      String   @unique
+  password   String
+  role       Role     @default(EMPLOYEE)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  employee   Employee?
+  auditLogs  AuditLog[]
+}
+
+model Employee {
+  id           String    @id @default(cuid())
+  userId       String    @unique
+  user         User      @relation(fields: [userId], references: [id])
+  employeeCode String    @unique
+  department   String
+  designation  String
+  phone        String?
+  joinDate     DateTime
+  exitDate     DateTime?
+  isActive     Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  assignments     Assignment[]
+  damageReports   DamageReport[]
+  assetRequests   AssetRequest[]
+  returnChecklist ReturnChecklist[]
+}
+
+model Supplier {
+  id           String   @id @default(cuid())
+  name         String
+  contactEmail String
+  contactPhone String?
+  address      String?
+  contractDate DateTime?
+  slaDays      Int       @default(7)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  assets Asset[]
+}
+
+model Asset {
+  id             String         @id @default(cuid())
+  assetCode      String         @unique
+  name           String
+  type           AssetType
+  brand          String
+  model          String
+  serialNumber   String         @unique
+  purchaseDate   DateTime
+  warrantyExpiry DateTime
+  status         AssetStatus    @default(AVAILABLE)
+  condition      AssetCondition @default(GOOD)
+  healthScore    Int            @default(100)
+  qrCode         String?
+  supplierId     String?
+  supplier       Supplier?      @relation(fields: [supplierId], references: [id])
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  assignments     Assignment[]
+  damageReports   DamageReport[]
+  ipLogs          IpLog[]
+  assetRequests   AssetRequest[]
+  returnChecklist ReturnChecklist[]
+}
+
+model Assignment {
+  id              String    @id @default(cuid())
+  employeeId      String
+  employee        Employee  @relation(fields: [employeeId], references: [id])
+  assetId         String
+  asset           Asset     @relation(fields: [assetId], references: [id])
+  assignedDate    DateTime  @default(now())
+  returnedDate    DateTime?
+  isActive        Boolean   @default(true)
+  receiptUrl      String?
+  notes           String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model AssetRequest {
+  id          String        @id @default(cuid())
+  employeeId  String
+  employee    Employee      @relation(fields: [employeeId], references: [id])
+  assetId     String?
+  asset       Asset?        @relation(fields: [assetId], references: [id])
+  assetType   AssetType
+  status      RequestStatus @default(PENDING)
+  reason      String?
+  rejectedNote String?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model IpLog {
+  id         String   @id @default(cuid())
+  assetId    String
+  asset      Asset    @relation(fields: [assetId], references: [id])
+  ipAddress  String
+  macAddress String?
+  lastSeen   DateTime @default(now())
+  isDuplicate Boolean @default(false)
+  createdAt  DateTime @default(now())
+}
+
+model DamageReport {
+  id          String       @id @default(cuid())
+  assetId     String
+  asset       Asset        @relation(fields: [assetId], references: [id])
+  employeeId  String
+  employee    Employee     @relation(fields: [employeeId], references: [id])
+  description String
+  photoUrl    String?
+  repairCost  Float?
+  status      DamageStatus @default(OPEN)
+  resolvedAt  DateTime?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model ReturnChecklist {
+  id         String          @id @default(cuid())
+  employeeId String
+  employee   Employee        @relation(fields: [employeeId], references: [id])
+  assetId    String
+  asset      Asset           @relation(fields: [assetId], references: [id])
+  status     ChecklistStatus @default(PENDING)
+  checkedAt  DateTime?
+  notes      String?
+  createdAt  DateTime        @default(now())
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  action    String
+  entity    String
+  entityId  String?
+  oldValue  Json?
+  newValue  Json?
+  createdAt DateTime @default(now())
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  title     String
+  message   String
+  type      String
+  isRead    Boolean  @default(false)
+  targetRole Role?
+  createdAt DateTime @default(now())
+}
